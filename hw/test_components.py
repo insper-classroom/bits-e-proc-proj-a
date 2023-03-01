@@ -2,6 +2,9 @@
 
 from .components import *
 import random
+import pytest
+from myhdl import *
+
 
 random.seed(5)
 randrange = random.randrange
