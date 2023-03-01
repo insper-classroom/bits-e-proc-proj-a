@@ -39,3 +39,7 @@ jobs:
         -name: test or8way
           run: |
             pytest hw/test_components.py -k or8way
+
+        -name: test mux4way
+          run: |
+            pytest hw/test_components.py -k mux4way
