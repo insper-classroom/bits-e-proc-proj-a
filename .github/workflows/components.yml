@@ -15,27 +15,27 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-  steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v3
-      with:
-        python-version: "3.8"
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.8
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.8"
 
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    # ------------- Tests ----------------
-    - name: test and16
-      run: |
-        pytest hw/test_components.py -k and16
+      # ------------- Tests ----------------
+      - name: test and16
+        run: |
+          pytest hw/test_components.py -k and16
 
-    - name: test barrelShifter
-      run: |
-        pytest hw/test_components.py -k barrelShifter
+      - name: test barrelShifter
+        run: |
+          pytest hw/test_components.py -k barrelShifter
 
-    -name: test or8way
-      run: |
-        pytest hw/test_components.py -k or8way
+      -name: test or8way
+        run: |
+          pytest hw/test_components.py -k or8way
