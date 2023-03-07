@@ -294,7 +294,6 @@ def bin2bcd(b, bcd1, bcd0):
     """
     componente que converte um vetor de b[8:] (bin)
     para dois digitos em BCD
-
     Exemplo:
     bin  = `01010010`
     BCD1 = 8
@@ -303,14 +302,15 @@ def bin2bcd(b, bcd1, bcd0):
 
     foo = Signal(intbv(0)[4:])
 
+    tens = tuple(num//10 for num in range(100))
+    ones = tuple(num%10 for num in range(100))
+
     @always_comb
     def comb():
-        bcd1.next = foo
-        bcd0.next = foo
+        bcd1.next = tens[b]
+        bcd0.next = ones[b]
 
     return comb
-
-
 # -----------------------------#
 # Conceito A
 # -----------------------------#
