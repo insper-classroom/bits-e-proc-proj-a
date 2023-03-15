@@ -16,7 +16,7 @@ def and16(a, b, q):
 
     @always_comb
     def comb():
-        q.next = foo
+        q.next = a and b
 
     return comb
 
@@ -49,7 +49,7 @@ def orNway(a, q):
 
     @always_comb
     def comb():
-        q.next = foo
+        q.next = a[0] or a[1] or a[2] or a[3] or a[4] or a[5] or a[6] or a[7] or a[8] or a[9] or a[10] or a[11] or a[12] or a[13] or a[14] or a[15]
 
     return comb
 
@@ -91,7 +91,7 @@ def mux2way(q, a, b, sel):
 
     @always_comb
     def comb():
-        q.next = foo
+        q.next = a if sel == 0 else b
 
     return comb
 
@@ -134,7 +134,8 @@ def mux8way(q, a, b, c, d, e, f, g, h, sel):
 
     @always_comb
     def comb():
-        q.next = foo
+        lista = [a, b, c, d, e, f, g, h]
+        q.next = lista[sel]
 
     return comb
 
@@ -179,7 +180,10 @@ def deMux4way(a, q0, q1, q2, q3, sel):
 
     @always_comb
     def comb():
-        q0.next = foo
+        lista = [q0, q1, q2, q3]
+        for i in range(4):
+            lista[i].next = 0
+        lista[sel].next = a
 
     return comb
 
@@ -283,10 +287,45 @@ def bin2hex(hex0, sw):
 
     @always_comb
     def comb():
-        hex0.next[4:] = sw[4:]
+        if sw[4:0] == 0:
+            hex0.next = "1000000"
+        elif sw[4:0] == 1:
+            hex0.next = "1111001"
+        elif sw[4:0] == 2:
+            hex0.next = "0100100"
+        elif sw[4:0] == 3:
+            hex0.next = "0110000"
+        elif sw[4:0] == 4:
+            hex0.next = "0011001"
+        elif sw[4:0] == 5: #
+            hex0.next = "0010010"
+        elif sw[4:0] == 6:
+            hex0.next = "0000010"
+        elif sw[4:0] == 7:
+            hex0.next = "1111000"
+        elif sw[4:0] == 8:
+            hex0.next = "0000000"
+        elif sw[4:0] == 9:
+            hex0.next = "0010000"
+        elif sw[4:0] == 10:
+            hex0.next = "0001000"
+        elif sw[4:0] == 11:
+            hex0.next = "0000011"
+        elif sw[4:0] == 12:
+            hex0.next = "1000110"
+        elif sw[4:0] == 13:
+            hex0.next = "0100001"
+        elif sw[4:0] == 14:
+            hex0.next = "0000110"
+        else:
+            hex0.next = "0001110"
+  
+
 
     return comb
 
+DIG0 = tuple(i for i in range(10) for i in range(10))
+DIG1 = tuple(i for i in range(10) for _ in range(10))
 
 @block
 def bin2bcd(b, bcd1, bcd0):
@@ -304,8 +343,8 @@ def bin2bcd(b, bcd1, bcd0):
 
     @always_comb
     def comb():
-        bcd1.next = foo
-        bcd0.next = foo
+        bcd1.next = DIG0[int(b)]
+        bcd0.next = DIG1[int(b)]
 
     return comb
 
