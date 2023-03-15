@@ -96,6 +96,8 @@ def mux2way(q, a, b, sel):
             q.next = a
         elif sel == 1:
             q.next = b
+       
+        q.next = a if sel == 0 else b
 
     return comb
 
@@ -138,7 +140,8 @@ def mux8way(q, a, b, c, d, e, f, g, h, sel):
 
     @always_comb
     def comb():
-        q.next = foo
+        lista = [a, b, c, d, e, f, g, h]
+        q.next = lista[sel]
 
     return comb
 
@@ -183,7 +186,10 @@ def deMux4way(a, q0, q1, q2, q3, sel):
 
     @always_comb
     def comb():
-        q0.next = foo
+        lista = [q0, q1, q2, q3]
+        for i in range(4):
+            lista[i].next = 0
+        lista[sel].next = a
 
     return comb
 
@@ -287,10 +293,45 @@ def bin2hex(hex0, sw):
 
     @always_comb
     def comb():
-        hex0.next[4:] = sw[4:]
+        if sw[4:0] == 0:
+            hex0.next = "1000000"
+        elif sw[4:0] == 1:
+            hex0.next = "1111001"
+        elif sw[4:0] == 2:
+            hex0.next = "0100100"
+        elif sw[4:0] == 3:
+            hex0.next = "0110000"
+        elif sw[4:0] == 4:
+            hex0.next = "0011001"
+        elif sw[4:0] == 5: #
+            hex0.next = "0010010"
+        elif sw[4:0] == 6:
+            hex0.next = "0000010"
+        elif sw[4:0] == 7:
+            hex0.next = "1111000"
+        elif sw[4:0] == 8:
+            hex0.next = "0000000"
+        elif sw[4:0] == 9:
+            hex0.next = "0010000"
+        elif sw[4:0] == 10:
+            hex0.next = "0001000"
+        elif sw[4:0] == 11:
+            hex0.next = "0000011"
+        elif sw[4:0] == 12:
+            hex0.next = "1000110"
+        elif sw[4:0] == 13:
+            hex0.next = "0100001"
+        elif sw[4:0] == 14:
+            hex0.next = "0000110"
+        else:
+            hex0.next = "0001110"
+  
+
 
     return comb
 
+DIG0 = tuple(i for i in range(10) for i in range(10))
+DIG1 = tuple(i for i in range(10) for _ in range(10))
 
 @block
 def bin2bcd(b, bcd1, bcd0):
@@ -312,6 +353,8 @@ def bin2bcd(b, bcd1, bcd0):
     def comb():
         bcd1.next = tens[b]
         bcd0.next = ones[b]
+        bcd1.next = DIG0[int(b)]
+        bcd0.next = DIG1[int(b)]
 
     return comb
 # -----------------------------#
