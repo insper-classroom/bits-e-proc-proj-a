@@ -117,18 +117,42 @@ def fullAdder(a, b, c, soma, carry):
 
 @block
 def addcla4(a, b, q):
+
+    new_a = [a(i) for i in range(4)]
+    new_b = [b(i) for i in range(4)]
+
+    z = 0
+
     @always_comb
     def comb():
-        pass
+        c =[z for i in range(4+1)]
+        
+        for i in range(4):
+            c[i+1] = (new_a[i] & new_b[i]) | (new_a[i] ^ new_b[i]) & c[i]
+            q.next[i] = new_a[i] ^ new_b[i] ^ c[i]
 
     return instances()
 
 
 @block
 def addcla16(a, b, q):
+    new_a = [a(i) for i in range(16)]
+    new_b = [b(i) for i in range(16)]
+
+    z = 0
+
     @always_comb
     def comb():
-        pass
+        c =[z for i in range(16+1)]
+        
+        for i in range(16):
+            c[i+1] = (new_a[i] & new_b[i]) | ((new_a[i] ^ new_b[i]) & c[i])
+            
+        if c[16] == 0:
+            for i in range(16):
+                q.next[i] = (new_a[i] ^ new_b[i]) ^ c[i]
+        else:
+            q.next = 0
 
     return instances()
 
@@ -146,3 +170,5 @@ def ula_new(x, y, c, zr, ng, sr, sf, bcd, saida, width=16):
 @block
 def bcdAdder(x, y, z):
     pass
+
+
