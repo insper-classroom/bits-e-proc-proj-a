@@ -37,7 +37,10 @@ def ula(x, y, c, zr, ng, saida, width=16):
 def inversor(z, a, y):
     @always_comb
     def comb():
-        pass
+        if z == 1:
+            y.next = ~a
+        else:
+            y.next = a
 
     return instances()
 
@@ -47,7 +50,16 @@ def comparador(a, zr, ng, width):
     # width insica o tamanho do vetor a
     @always_comb
     def comb():
-        pass
+        if a == 0:
+            zr.next = 1
+            ng.next = 0
+        # [width - 1] indica o bit mais significativo
+        elif a[width - 1] == 1: # se o bit mais significativo for 1
+            zr.next = 0
+            ng.next = 1
+        else:
+            zr.next = 0
+            ng.next = 0
 
     return instances()
 
@@ -56,7 +68,10 @@ def comparador(a, zr, ng, width):
 def zerador(z, a, y):
     @always_comb
     def comb():
-        pass
+        if z == 1:
+            y.next = 0
+        else:
+            y.next = a
 
     return instances()
 
@@ -65,7 +80,7 @@ def zerador(z, a, y):
 def add(a, b, q):
     @always_comb
     def comb():
-        pass
+        q.next = a + b
 
     return instances()
 
@@ -74,7 +89,7 @@ def add(a, b, q):
 def inc(a, q):
     @always_comb
     def comb():
-        pass
+        q.next = a + 1
 
     return instances()
 
