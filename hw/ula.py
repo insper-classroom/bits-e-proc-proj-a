@@ -23,25 +23,11 @@ def ula(x, y, c, zr, ng, saida, width=16):
     c_ny = c(2)
     c_f = c(1)
     c_no = c(0)
-
+    
     @always_comb
     def comb():
         pass
-
-    return instances()
-
-
-# -z faz complemento de dois
-# ~z inverte bit a bit
-@block
-def inversor(z, a, y):
-    @always_comb
-    def comb():
-        if z == 1:
-            y.next = ~a
-        else:
-            y.next = a
-
+        
     return instances()
 
 
@@ -90,6 +76,17 @@ def inc(a, q):
     @always_comb
     def comb():
         q.next = a + 1
+
+    return instances()
+
+@block
+def inversor(z, a, y):
+    @always_comb
+    def comb():
+        if z == 1:
+            y.next = ~a
+        else:
+            y.next = a
 
     return instances()
 
@@ -161,3 +158,15 @@ def ula_new(x, y, c, zr, ng, sr, sf, bcd, saida, width=16):
 @block
 def bcdAdder(x, y, z):
     pass
+
+
+@block 
+def inversor(c, a, y):
+    @always_comb
+    def comb():
+        if c == 1:
+            y.next = ~a
+        else:
+            y.next = a
+
+    return instances()
