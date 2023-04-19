@@ -5,102 +5,60 @@
 
 ; Calcula o fatorial do número em R0 e armazena o valor em R1.
 
-; Inicializa o registrador R1 com 1
-leaw $0, %A
-movw (%A), %D
-leaw $6, %A
-movw %D, (%A)
-leaw $3, %A
-movw %D, (%A)
+PREPARANDO:
+    leaw $1, %A                     ; Joga 1 em A
+    movw %A, %D                     ; Move 1 pra D
+    movw %D, (%A)                   ; Move D pra RAM[1]
 
-LOOP:
-leaw $6, %A
-movw (%A), %D
-leaw $ZERO, %A
-je
-nop
-decw %D
-leaw $UM, %A
-je
-nop
-leaw $3, %A
-movw (%A), %D
-leaw $0, %A
-movw %D, (%A)
-leaw $6, %A
-movw (%A), %D
-decw %D
-leaw $1, %A
-movw %D, (%A)
-leaw $MULTIPLICA, %A
-jmp
-nop
-QUASEUM:
-leaw $6, %A
-movw (%A), %D
-decw %D
-movw %D, (%A)
-leaw $LOOP, %A
-jmp
-nop
-ZERO:
-leaw $1, %A
-movw $1, (%A)
-leaw $END2, %A
-jmp
-nop
-UM:
-leaw $1, %A
-movw $1, (%A)
-leaw $END2, %A
-jmp
-nop
+VAI:
+    leaw $0, %A                     ; jogo 0 em A
+    movw (%A), %D                   ; jogo RAM[0] em D
+    leaw $2, %A                     ; jogo 2 em A
+    subw %D, (%A), %D               ; subtari o valor de RAM[0] por RAM[2] (RAM[0] - RAM[2]) guarda valor em D
+    leaw $END, %A
+    je
+    nop 
 
+    leaw $2, %A                     ; Joga 2 em A
+    movw (%A), %D                   ; Move RAM[2] pra D
+    leaw $1, %A                     ; Joga 1 em A
+    addw %D, %A, %D                 ; RAM[2] ++
+    leaw $2, %A                     ; Joga 2 em A
+    movw %D, (%A)                   ; Move D pra RAM[2]
+    leaw $1, %A                     ; joga 1 em A
+    movw %A, %D                     ; Joga 1 em D
+    leaw $4, %A                     ; Joga 4 em A
+    movw %D, (%A)                   ; RAM[4] == D
+    leaw $1, %A                     ; Joga 1 em A
+    movw (%A), %D                   ; Move RAM[1] pra D
+    leaw $3, %A                     ; Joga 3 pra A
+    movw %D, (%A)                   ; Move RAM[1] pra RAM[3]
 
+CONTINUA:
+    leaw $2, %A                     ; Joga 2 em A
+    movw (%A), %D                   ; Joga RAM[2] em D
+    leaw $4, %A                     ; Joga 4 em A
+    subw %D, (%A), %D               ; Subtrai RAM[2] - RAM[4]
+    leaw $VAI, %A
+    je
+    nop
 
+    leaw $1, %A                     ; Joga 1 em A
+    movw %A, %D                     ; Move 1 pra D
+    leaw $4, %A                     ; Joga 4 em A
+    movw (%A), %D                   ; Move RAM[4] pra D
+    leaw $1, %A                     ; Joga 1 em A
+    addw %D, %A,%D                  ; RAM[4] ++
+    leaw $4, %A                     ; Joga 4 em A
+    movw %D, (%A)                   ; Move D pra RAM[4]
+    leaw $1, %A                     ; Joga 1 em A
+    movw (%A), %D                   ; Move RAM[1] para D
+    leaw $3, %A                     ; Joga 3 em A
+    addw %D, (%A), %D               ; Adiciona em D o valor de D (RAM[1] + RAM[3])
+    leaw $1, %A                     ; Joga 1 em A
+    movw %D, (%A)                   ; Move valor de D pra RAM[1]
+    leaw $CONTINUA, %A
+    jmp
+    nop
 
-MULTIPLICA:
-leaw $3, %A
-movw $0, (%A)
-leaw $1, %A
-movw (%A), %D
-leaw $END, %A
-je
-nop
-LOOP5:
-leaw $0, %A
-movw (%A), %D
-leaw $3, %A
-addw %D, (%A),%D
-movw %D, (%A)
-leaw $1, %A
-movw (%A), %D
-decw %D
-movw %D, (%A)
-leaw $LOOP5, %A
-jg
-nop
 END:
-leaw $QUASEUM, %A
-jmp
-nop
-
-
-
-END2:
-leaw $3, %A
-movw (%A), %D
-leaw $1, %A
-movw %D, (%A)
-leaw $IF ,%A
-je
-nop
-leaw $END3, %A
-jmp
-nop
-
-IF:
-leaw $1, %A
-movw %A, %D
-movw %D, (%A)
-END3:
