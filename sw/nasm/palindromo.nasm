@@ -47,3 +47,5 @@ movw %D, (%A)        ;RAM[0] = 1
 
 IF2MAIOR:
 IF1MAIOR:
+
+
