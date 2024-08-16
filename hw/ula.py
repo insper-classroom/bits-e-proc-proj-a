@@ -24,12 +24,56 @@ def ula(x, y, c, zr, ng, saida, width=16):
     c_f = c(1)
     c_no = c(0)
 
+    # Instantiate dependent modules
+    zx = zerador(c_zx, x, zx_out)
+    nx = inversor(c_nx, x, nx_out)
+    zy = zerador(c_zy, y, zy_out)
+    ny = inversor(c_ny, y, ny_out)
+    and_ = and_gate(nx_out, ny_out, and_out)
+    add_out = add(nx_out, ny_out, add_out)
+    mux = multiplexador(c_f, and_out, add_out, mux_out)
+    no = inversor(c_no, mux_out, no_out)
+    comp = comparador(no_out, zr, ng, width)
+
     @always_comb
     def comb():
-        pass
+        # Connect inputs and outputs of dependent modules
+        zx.a.next = x
+        nx.a.next = x
+        zy.a.next = y
+        ny.a.next = y
+        and_.a.next = nx_out
+        and_.b.next = ny_out
+        add_out.a.next = nx_out
+        add_out.b.next = ny_out
+        mux.a.next = and_out
+        mux.b.next = add_out
+        no.a.next = mux_out
+        comp.a.next = no_out
+
+        # Connect output of comparador to saida
+        saida.next = comp.ng
+        
+    return instances()
+
+@block
+def and_gate(a, b, q):
+    @always_comb
+    def comb():
+        q.next = a and b
 
     return instances()
 
+@block
+def multiplexador(z, a, b, y):
+    @always_comb
+    def comb():
+        if z == 1:
+            y.next = b
+        else:
+            y.next = a
+
+    return instances()
 
 # -z faz complemento de dois
 # ~z inverte bit a bit
